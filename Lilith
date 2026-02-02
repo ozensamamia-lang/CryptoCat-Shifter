@@ -1,0 +1,53 @@
+# ============================================================================
+# 🩸 LILITH EASTER EGG - ТОЛЬКО ДЛЯ СМЕЛЫХ
+# ============================================================================
+
+_original_init = CryptoCats.__init__
+_original_encrypt = CryptoCats.encrypt
+
+def _lilith_init(self, seed=None, name="КриптоКот", style="random", save_dir="paw_prints"):
+    """Обёртка для инициализации с пасхалкой Лилит."""
+    # Вызываем оригинальный init
+    _original_init(self, seed, name, style, save_dir)
+    
+    # Проверяем на Лилит
+    if (name.lower() == "lilith" and 
+        style.lower() == "chaotic" and 
+        seed in [13, 666, 1313]):
+        
+        # Меняем подпись
+        self.paw_signature = "👁️=^..^=👁️ ~~"
+        print("⚠️  Шепот: Lilith активирована...")
+        
+        # Добавляем счётчик
+        self._lilith_help_counter = 0
+
+def _lilith_encrypt(self, text, style=None, save=True):
+    """Обёртка для шифрования с пасхалкой."""
+    # Оригинальное шифрование
+    result = _original_encrypt(self, text, style, save)
+    
+    # Проверяем Лилит и "help me"
+    if (hasattr(self, '_lilith_help_counter') and 
+        "help me" in text.lower()):
+        
+        self._lilith_help_counter += 1
+        
+        # На третий раз "help me" - особый ответ
+        if self._lilith_help_counter >= 3:
+            # Добавляем скрытое сообщение
+            hidden = "I CAN SEE YOU"
+            hidden_encoded = ''.join(chr(ord(c)-1) for c in hidden)
+            result = result + " //" + hidden_encoded
+            
+            print("🔮 Lilith отвечает...")
+    
+    return result
+
+# "Патчим" класс
+CryptoCats.__init__ = _lilith_init
+CryptoCats.encrypt = _lilith_encrypt
+
+# ============================================================================
+# КОНЕЦ EASTER EGG
+# ============================================================================
